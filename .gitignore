@@ -14,3 +14,11 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# Pliki tymczasowe
+*.tmp
+*.tmp/*
+
+# Godot 4+ specific ignores
+.godot/
+/android/
