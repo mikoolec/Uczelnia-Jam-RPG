@@ -6,19 +6,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClickInOrderMinigame : MonoBehaviour
+public class ClickInOrderMinigame : MinigameBase
 {
-    public TextMeshProUGUI infoText;
     public Button[] buttons;
     public int minNum = 1;
     public int maxNum = 100;
-    public float delaySeconds = 3f;
 
     private List<int> currentNumbers = new List<int>();
     private List<int> expectedOrder = new List<int>();
-
     private int currentExpectedIndex = 0;
-    private bool isEnding = false;
 
     private void Awake()
     {
@@ -30,14 +26,14 @@ public class ClickInOrderMinigame : MonoBehaviour
 
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         SetupNewSequence();
     }
     
     private void SetupNewSequence()
     {
-        isEnding = false;
         currentExpectedIndex = 0;
         currentNumbers.Clear();
         expectedOrder.Clear();
@@ -84,37 +80,22 @@ public class ClickInOrderMinigame : MonoBehaviour
 
             if (currentExpectedIndex >= buttons.Length)
             {
-                infoText.text = "Success! You've fixed it!";
-                StartCoroutine(EndMinigameCoroutine(true));
+                EndMinigame(true, "Success! You've fixed it!");
             }
         }
         else
         {
             currentExpectedIndex = 0;
             SetButtonColor(buttons[buttonIndex], Color.red);
-            infoText.text = "Wrong button clicked! You were unable to fix it!";
-            StartCoroutine(EndMinigameCoroutine(false));
+            EndMinigame(false, "Wrong button clicked! You were unable to fix it!");
         }
     }
 
-    private IEnumerator EndMinigameCoroutine(bool success)
+    protected override void OnMinigameEnding()
     {
-        isEnding = true;
-
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i].interactable = false;
-        }
-
-        yield return new WaitForSeconds(delaySeconds);
-
-        if (success)
-        {
-            MinigameManager.Instance.OnMinigameSuccess();
-        }
-        else
-        {
-            MinigameManager.Instance.OnMinigameFailure();
         }
     }
 
