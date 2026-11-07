@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    public static GameObject CurrentTargetObject { get; private set; }
+
+
     [Header("Settings")]
     public float interactionDistance = 3f;
     public LayerMask interactableLayer;
@@ -23,6 +26,8 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
+        CurrentTargetObject = null;
+
         if (MinigameManager.Instance != null && MinigameManager.Instance.isMinigameActive)
         {
             if (interactionText != null)
@@ -41,6 +46,8 @@ public class PlayerInteraction : MonoBehaviour
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
             if (interactable != null)
             {
+                CurrentTargetObject = hit.collider.gameObject;
+
                 if (interactionText != null)
                 {
                     interactionText.gameObject.SetActive(true);
