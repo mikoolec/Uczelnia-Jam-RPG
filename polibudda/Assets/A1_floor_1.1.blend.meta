@@ -3,7 +3,27 @@ guid: 3d611ff3203de0246be3ec32325a9375
 ModelImporter:
   serializedVersion: 24300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Pod\u0142oga"
+    second: {fileID: 2100000, guid: a133126c056e11048a2e543a6dfbe5aa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rura
+    second: {fileID: 2100000, guid: 8bcbf411a6dacb649beb0a04890f552e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Szary
+    second: {fileID: 2100000, guid: e726bb15bba2d4040aadb73359e87f00, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u015Aciany"
+    second: {fileID: 2100000, guid: f9787dc3f1113fa4e81af5dfbf8e5973, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
