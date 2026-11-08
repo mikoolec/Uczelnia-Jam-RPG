@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI ectsText;
+    public GameObject mainMenuPanel;
+    public GameObject infoPanel;
 
     public ClockManager physicalClock;
 
@@ -43,8 +45,7 @@ public class GameManager : MonoBehaviour
         {
             ectsText.text = $"ECTS: {currentEcts}/{requiredEcts}";
         }
-        //if (physicalClock != null && clockFixStagesCompleted >= totalClockStages)
-        if (physicalClock != null)
+        if (physicalClock != null && clockFixStagesCompleted >= totalClockStages)
         {
             physicalClock.SetTime(hours, minutes);
         }
@@ -72,6 +73,30 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        Time.timeScale = 1f;
+        if (mainMenuPanel!= null)
+        {
+            mainMenuPanel.SetActive(false);
+        }
+
+        if (infoPanel != null)
+        {
+            infoPanel.SetActive(false);
+        }
+
+        if (timeText != null)
+        {
+            timeText.gameObject.SetActive(true);
+        }
+
+        if (ectsText != null)
+        {
+            ectsText.gameObject.SetActive(true);
+        }
+
+            Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         isTimeRunning = true;
         currentEcts = 0;
         currentTimeMinutes = startHour * 60;
@@ -97,6 +122,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ToggleInfoPanel()
+    {
+        if (infoPanel != null)
+        {
+            infoPanel.SetActive(!infoPanel.activeSelf);
+        }
+    }
     void Awake()
     {
         if (Instance == null)
@@ -112,7 +144,22 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartGame();
+        ShowMainMenu();
+    }
+
+    private void ShowMainMenu()
+    {
+        isTimeRunning = false;
+
+        if (mainMenuPanel != null)
+        {
+            mainMenuPanel.SetActive(true);
+        }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        Time.timeScale = 0f;
     }
 
     void Update()

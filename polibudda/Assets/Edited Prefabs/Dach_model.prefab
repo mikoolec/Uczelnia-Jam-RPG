@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 3177265258369730394}
   - component: {fileID: 5901371093774990734}
   - component: {fileID: 2845309947753228912}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Klapa
   m_TagString: Untagged
   m_Icon: {fileID: 0}

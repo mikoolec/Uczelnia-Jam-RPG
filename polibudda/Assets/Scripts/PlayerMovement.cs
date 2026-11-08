@@ -6,8 +6,12 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 10f;
     public float jumpHeight = 2f;
     public float gravity = -10f;
+    public float stepInterval = 0.5f;
+
+    private float stepTimer = 0f;
     private CharacterController controller;
     private Vector3 velocity;
+
 
     void Start()
     {
@@ -41,5 +45,23 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         Vector3 finalMovement = (move * speed) + velocity;
         controller.Move(finalMovement * Time.deltaTime);
+
+        if (move.magnitude > 0.1 && controller.isGrounded)
+        {
+            stepTimer -= Time.deltaTime;
+
+            if (stepTimer < 0f)
+            {
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlaySFX("walking");
+                }
+                stepTimer = stepInterval;
+            }
+        }
+        else
+        {
+            stepTimer = 0f;
+        }
     }
 }

@@ -11,6 +11,10 @@ public class ElevatorController : MonoBehaviour
     public float floorHeight = 3.5f;
     public float baseFloorY = 0f;
 
+    [Header("Roof Setting")]
+    public int roofFloorNumber = 9;
+    public float roofYOffset = 1.5f;
+
     [Header("Door State")]
     public bool isOpen { get; private set; } = false;
 
@@ -62,6 +66,11 @@ public class ElevatorController : MonoBehaviour
 
     public void TeleportToFloor(int floorNumber)
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX("elevator_beep");
+        }
+
         if (playerController != null)
         {
             playerController.enabled = false;
@@ -69,11 +78,21 @@ public class ElevatorController : MonoBehaviour
 
         Vector3 newPos = playerTransform.position;
         newPos.y = baseFloorY + ((floorNumber - 1) * floorHeight);
+
+        if (floorNumber == roofFloorNumber)
+        {
+            newPos.y += roofYOffset;
+        }
+
         playerTransform.position = newPos;
 
         if (playerController != null)
         {
             playerController.enabled = true;
         }
+
+        StopAllCoroutines();
+        isOpen = true;
+        StartCoroutine(DoorAnimationCoroutine());
     }
 }
