@@ -15,7 +15,7 @@ public class ClockRepairStation : MonoBehaviour, IInteractable
     }
 
     public List<ClockStage> stages = new List<ClockStage>();
-    private float holdDurationPerStage = 20f;  // In seconds
+    public float holdDurationPerStage = 20f;  // In seconds
     private float currentHoldTimer = 0f;
     private bool isPlayerHovering = false;
 
