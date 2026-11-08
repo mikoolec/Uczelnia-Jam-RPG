@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                AudioManager.Instance.PlaySFX("jump");
             }
         }
         float x = Input.GetAxis("Horizontal");

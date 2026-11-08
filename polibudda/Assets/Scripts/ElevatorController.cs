@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ElevatorController : MonoBehaviour
@@ -12,6 +13,8 @@ public class ElevatorController : MonoBehaviour
 
     [Header("Door State")]
     public bool isOpen { get; private set; } = false;
+
+    private bool isAnimating = false;
 
     private void Start()
     {
@@ -28,19 +31,33 @@ public class ElevatorController : MonoBehaviour
 
     public void ToggleDoors()
     {
+        if (isAnimating)
+        {
+            return;
+        }
+
         isOpen = !isOpen;
-        PlayDoorAnimation();
+        StartCoroutine(DoorAnimationCoroutine());
     }
 
-    private void PlayDoorAnimation()
+    private IEnumerator DoorAnimationCoroutine()
     {
+        isAnimating = true;
+
         if (doorAnimator != null)
         {
             float speedModifier = isOpen ? -1f : 1f;
             doorAnimator.SetFloat("DoorSpeed", speedModifier);
 
-            doorAnimator.Play("ElevatorDoorAnimation", 0, isOpen ? 1f : 0f);
+            float normalizedTime = isOpen ? 0.99f : 0f;
+            doorAnimator.Play("ElevatorDoorAnimation", 0, normalizedTime);
+            yield return null;
+            
+            float animationDuration = doorAnimator.GetCurrentAnimatorStateInfo(0).length;
+            yield return new WaitForSeconds(animationDuration);
         }
+
+        isAnimating = false;
     }
 
     public void TeleportToFloor(int floorNumber)

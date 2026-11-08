@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI ectsText;
 
+    public ClockManager physicalClock;
+
     private bool HasWon()
     {
         // NOTE: Fixing clock is must have, but maybe ECTS could be optional?
@@ -30,13 +32,21 @@ public class GameManager : MonoBehaviour
 
     private void UpdateUI()
     {
+        int hours = Mathf.FloorToInt(currentTimeMinutes / 60);
+        int minutes = Mathf.FloorToInt(currentTimeMinutes % 60);
+
         if (timeText != null)
         {
-            timeText.text = $"{Mathf.Floor(currentTimeMinutes / 60):00}:{Mathf.Floor(currentTimeMinutes % 60):00}";
+            timeText.text = $"{hours:00}:{minutes:00}";
         }
         if (ectsText != null)
         {
             ectsText.text = $"ECTS: {currentEcts}/{requiredEcts}";
+        }
+        //if (physicalClock != null && clockFixStagesCompleted >= totalClockStages)
+        if (physicalClock != null)
+        {
+            physicalClock.SetTime(hours, minutes);
         }
     }
     
@@ -67,6 +77,11 @@ public class GameManager : MonoBehaviour
         currentTimeMinutes = startHour * 60;
         clockFixStagesCompleted = 0;
         UpdateUI();
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StartPlaylist();
+        }
     }
 
     public void EndGame()

@@ -45,20 +45,30 @@ public class ClockRepairStation : MonoBehaviour, IInteractable
 
         if (currentStage != null && currentStage.isPlaced && !currentStage.isRepaired)
         {
-            if (Input.GetKey(KeyCode.E) && PlayerInteraction.CurrentTargetObject == gameObject)
+            if (PlayerInteraction.CurrentTargetObject == gameObject)
             {
-                currentHoldTimer += Time.deltaTime;
-
                 if (repairProgressBarRoot != null)
                 {
                     repairProgressBarRoot.SetActive(true);
                 }
 
-                UpdateVisualProgress(currentHoldTimer / holdDurationPerStage);
-
-                if (currentHoldTimer >= holdDurationPerStage)
+                if (Input.GetKey(KeyCode.E))
                 {
-                    CompleteCurrentStage(currentStage);
+                    currentHoldTimer += Time.deltaTime;
+
+                    UpdateVisualProgress(currentHoldTimer / holdDurationPerStage);
+
+                    if (currentHoldTimer >= holdDurationPerStage)
+                    {
+                        CompleteCurrentStage(currentStage);
+                    }
+                }
+            }
+            else
+            {
+                if (repairProgressBarRoot != null && repairProgressBarRoot.activeSelf)
+                {
+                    repairProgressBarRoot.SetActive(false);
                 }
             }
         }
