@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour
     public Sound[] sfxSounds;
 
     private bool isMusicPlaying = false;
+    private int lastPlayedIndex = -1;
 
     private void Awake()
     {
@@ -40,7 +41,7 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        if (isMusicPlaying && !musicSource.isPlaying)
+        if (isMusicPlaying && musicSource != null && !musicSource.isPlaying)
         {
             PlayRandomMusic();
         }
@@ -48,25 +49,56 @@ public class AudioManager : MonoBehaviour
 
     public void StartPlaylist()
     {
-        if (musicSounds.Length > 0)
+        if (musicSource == null)
         {
-            isMusicPlaying = true;
-            PlayRandomMusic();
-        }
-        else
-        {
+            Debug.LogError("MusicSource is not assigned!");
             return;
         }
+
+        if (musicSounds == null || musicSounds.Length == 0)
+        {
+            Debug.LogError("No music sounds assigned!");
+            return;
+        }
+
+        isMusicPlaying = true;
+
+        Debug.Log("Starting music playlist...");
+        PlayRandomMusic();
     }
 
     private void PlayRandomMusic()
     {
-        int randomIndex = UnityEngine.Random.Range(0, musicSounds.Length);
+        int randomIndex;
+
+        if (musicSounds.Length == 1)
+        {
+            randomIndex = 0;
+        }
+        else
+        {
+            do
+            {
+                randomIndex = UnityEngine.Random.Range(0, musicSounds.Length);
+            }
+            while (randomIndex == lastPlayedIndex);
+        }
+
+        lastPlayedIndex = randomIndex;
+
         Sound randomSound = musicSounds[randomIndex];
+
+        if (randomSound.clip == null)
+        {
+            Debug.LogError("Selected music clip is null!");
+            return;
+        }
 
         musicSource.clip = randomSound.clip;
         musicSource.volume = randomSound.volume;
         musicSource.Play();
+
+        Debug.Log("Playing: " + randomSound.name);
     }
 
     public void PlaySFX(string soundName)
